@@ -1,0 +1,47 @@
+steps:
+  - name: "gcr.io/cloud-builders/docker"
+    args:
+      [
+        "build",
+        "--build-arg",
+        "VAR_ENV=$_VAR_ENV",
+        "-t",
+        "gcr.io/$_PROJECT_ID/$_IMAGE:$COMMIT_SHA",
+        ".",
+        "-f",
+        "$_DOCKER_FILE",
+      ]
+
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/$_PROJECT_ID/$_IMAGE:$COMMIT_SHA"]
+
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    entrypoint: "kustomize"
+    args:
+      - "build"
+      - "$_K8S_YAML_PATH"
+      - "-o"
+      - "/workspace/resources.yaml"
+
+  - name: "gcr.io/cloud-builders/gke-deploy"
+    args:
+      - run
+      - "-f"
+      - "/workspace/resources.yaml"
+      - --image=gcr.io/$_PROJECT_ID/$_IMAGE:$COMMIT_SHA
+      - --location=$_GKE_LOCATION
+      - --cluster=$_GKE_CLUSTER
+      - --project=$_PROJECT_ID
+      - --version=$COMMIT_SHA
+
+substitutions:
+  _PROJECT_ID: ""
+  _GKE_CLUSTER: ""
+  _GKE_LOCATION: ""
+  _VAR_ENV: ""
+  _DOCKER_FILE: "devops/Dockerfile"
+  _IMAGE: "bitbucket.org/dpoint-dev/dpoint-checkin-portal"
+  _K8S_YAML_PATH: devops/kubernetes/overlays/development
+
+tags:
+  - gcp-cloud-build-deploy
