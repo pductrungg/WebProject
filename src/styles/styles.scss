@@ -1,0 +1,34 @@
+@media (max-width: 576px) {
+  .customRangePicker {
+    max-width: 90vw;
+
+    .ant-picker-panel-layout {
+      overflow-x: scroll;
+    }
+  }
+
+  .customDatePicker {
+    max-width: 90%;
+    margin-left: 5rem;
+
+    .ant-picker-panel-layout {
+      overflow-x: scroll;
+    }
+  }
+
+  .leaveRequestFormModal {
+    .ant-modal-content {
+      height: 90vh;
+      overflow-y: scroll;
+    }
+  }
+}
+
+.customSpaceForm {
+  display: none;
+
+  @media (max-width: 576px) {
+    display: block;
+    height: 15rem;
+  }
+}
