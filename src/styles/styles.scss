@@ -22,6 +22,17 @@
       overflow-y: scroll;
     }
   }
+
+  .CFDatePick{
+    max-width: 90%;
+    margin-left: 5rem;
+
+    .ant-picker-panel-layout {
+      overflow-x: scroll;
+    }
+
+    
+  }
 }
 
 .customSpaceForm {
@@ -32,3 +43,4 @@
     height: 15rem;
   }
 }
+
