@@ -129,107 +129,107 @@ const CF = ({
         }return {totalHours,timePerDay};
     }, []);
 
-    const handleChange = (value) => {
-        if(value > 0){
-            form.setFieldValue('totalHour', value);
-            setIsOpenLeaveHourField && setIsOpenLeaveHourField(false);
-        }else {
-            form.resetFields(['totalHour','hourPerDay']);
-            !setIsOpenLeaveHourField && setIsOpenLeaveHourField(true);
-        }
-        setLeaveTime(value);
+    // const handleChange = (value) => {
+    //     if(value > 0){
+    //         form.setFieldValue('totalHour', value);
+    //         setIsOpenLeaveHourField && setIsOpenLeaveHourField(false);
+    //     }else {
+    //         form.resetFields(['totalHour','hourPerDay']);
+    //         !setIsOpenLeaveHourField && setIsOpenLeaveHourField(true);
+    //     }
+    //     setLeaveTime(value);
 
-        if(value !== LEAVE_TIME_HOUR.A_DAY){
-            if(isHiddenField){
-                setIsHiddenField(false);
-            }
-            if(!!form.getFieldValue('dayGo')) form.resetFields(['dayGo']);
-        }
+    //     if(value !== LEAVE_TIME_HOUR.A_DAY){
+    //         if(isHiddenField){
+    //             setIsHiddenField(false);
+    //         }
+    //         if(!!form.getFieldValue('dayGo')) form.resetFields(['dayGo']);
+    //     }
 
-        switch(value){
-            case LEAVE_TIME_HOUR.A_DAY:{
-                setIsHiddenField(true);
+    //     switch(value){
+    //         case LEAVE_TIME_HOUR.A_DAY:{
+    //             setIsHiddenField(true);
 
-                let dayApply = calDayNoWK(dayjs());
+    //             let dayApply = calDayNoWK(dayjs());
 
-                form.setFieldValue('dayGo',dayApply);
-                handleDayOff(dayApply);
+    //             form.setFieldValue('dayGo',dayApply);
+    //             handleDayOff(dayApply);
 
-                break;
-            }
-            case LEAVE_TIME_HOUR.TWO_DAYS:{
-                let dayApplyFromDate = calDayNoWK(dayjs());
-                let dayApplyToDate = calDayNoWK(dayApplyFromDate);
+    //             break;
+    //         }
+    //         case LEAVE_TIME_HOUR.TWO_DAYS:{
+    //             let dayApplyFromDate = calDayNoWK(dayjs());
+    //             let dayApplyToDate = calDayNoWK(dayApplyFromDate);
 
-                form.setFieldValue(
-                    'goFrom',
-                    dayjs(dayApplyFromDate)
-                        .set('h',WORKING_TIME.START[0])
-                        .set('m',WORKING_TIME.START[1])
-                        .set('s',WORKING_TIME.START[2])
-                );
-                form.setFieldValue(
-                    'dayBack',
-                    dayjs(dayApplyToDate)
-                        .set('h',WORKING_TIME.END[0])
-                        .set('m',WORKING_TIME.NEW_DAY[1])
-                        .set('s',WORKING_TIME.NEW_DAY[2]),
-                );
+    //             form.setFieldValue(
+    //                 'goFrom',
+    //                 dayjs(dayApplyFromDate)
+    //                     .set('h',WORKING_TIME.START[0])
+    //                     .set('m',WORKING_TIME.START[1])
+    //                     .set('s',WORKING_TIME.START[2])
+    //             );
+    //             form.setFieldValue(
+    //                 'dayBack',
+    //                 dayjs(dayApplyToDate)
+    //                     .set('h',WORKING_TIME.END[0])
+    //                     .set('m',WORKING_TIME.NEW_DAY[1])
+    //                     .set('s',WORKING_TIME.NEW_DAY[2]),
+    //             );
 
-                let hourPerDay = [
-                    {
-                        leaveDate: dayjs(dayApplyFromDate)
-                            .set('h',WORKING_TIME.NEW_DAY[0])
-                            .set('m',WORKING_TIME.NEW_DAY[1])
-                            .set('s',WORKING_TIME.NEW_DAY[2]),
-                        totalH: LEAVE_TIME_HOUR.A_DAY,
-                    },
-                    {
-                        leaveDate:dayjs(dayApplyToDate)
-                            .set('h',WORKING_TIME.NEW_DAY[0])
-                            .set('m',WORKING_TIME.NEW_DAY[1])
-                            .set('s',WORKING_TIME.NEW_DAY[2]),
-                        totalH: LEAVE_TIME_HOUR.A_DAY,
-                    },
-                ];
-                form.setFieldValue('hourPerDay', hourPerDay);
-                break;
-            }
-            case LEAVE_TIME_HOUR.OTHER:
-            default:{
-                form.resetFields(['goFrom','dayBack']);
-                break;
-            }
-        }
-    };
+    //             let hourPerDay = [
+    //                 {
+    //                     leaveDate: dayjs(dayApplyFromDate)
+    //                         .set('h',WORKING_TIME.NEW_DAY[0])
+    //                         .set('m',WORKING_TIME.NEW_DAY[1])
+    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
+    //                     totalH: LEAVE_TIME_HOUR.A_DAY,
+    //                 },
+    //                 {
+    //                     leaveDate:dayjs(dayApplyToDate)
+    //                         .set('h',WORKING_TIME.NEW_DAY[0])
+    //                         .set('m',WORKING_TIME.NEW_DAY[1])
+    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
+    //                     totalH: LEAVE_TIME_HOUR.A_DAY,
+    //                 },
+    //             ];
+    //             form.setFieldValue('hourPerDay', hourPerDay);
+    //             break;
+    //         }
+    //         case LEAVE_TIME_HOUR.OTHER:
+    //         default:{
+    //             form.resetFields(['goFrom','dayBack']);
+    //             break;
+    //         }
+    //     }
+    // };
 
-    const handleDayOff = (date) =>{
-        form.setFieldValue(
-            'goFrom',
-            dayjs(date)
-                .set('h',WORKING_TIME.START[0])
-                .set('m',WORKING_TIME.START[1])
-                .set('s',WORKING_TIME.START[2])
-        );
+    // const handleDayOff = (date) =>{
+    //     form.setFieldValue(
+    //         'goFrom',
+    //         dayjs(date)
+    //             .set('h',WORKING_TIME.START[0])
+    //             .set('m',WORKING_TIME.START[1])
+    //             .set('s',WORKING_TIME.START[2])
+    //     );
 
-        form.setFieldValue(
-            'dayBack',
-            dayjs(date)
-            .set('h',WORKING_TIME.END[0])
-            .set('m',WORKING_TIME.END[1])
-            .set('s',WORKING_TIME.END[2])
-        );
+    //     form.setFieldValue(
+    //         'dayBack',
+    //         dayjs(date)
+    //         .set('h',WORKING_TIME.END[0])
+    //         .set('m',WORKING_TIME.END[1])
+    //         .set('s',WORKING_TIME.END[2])
+    //     );
 
-        form.setFieldValue('hourPerDay',[
-            {
-                leaveDate:dayjs(date)
-                .set('h',WORKING_TIME.NEW_DAY[0])
-                .set('m',WORKING_TIME.NEW_DAY[1])
-                .set('s',WORKING_TIME.NEW_DAY[2]),
-                totalH: LEAVE_TIME_HOUR.A_DAY,
-            },
-        ]);
-    };
+    //     form.setFieldValue('hourPerDay',[
+    //         {
+    //             leaveDate:dayjs(date)
+    //             .set('h',WORKING_TIME.NEW_DAY[0])
+    //             .set('m',WORKING_TIME.NEW_DAY[1])
+    //             .set('s',WORKING_TIME.NEW_DAY[2]),
+    //             totalH: LEAVE_TIME_HOUR.A_DAY,
+    //         },
+    //     ]);
+    // };
 
     const ChangeTime = () =>{
         if(form.getFieldValue('leaveTime') === LEAVE_TIME_HOUR.TWO_DAYS){
@@ -284,13 +284,13 @@ const CF = ({
         }
     };
 
-    const handleChangeTimePerDay = (value) => {
-        if(value > 0){
-            let timePerDay = form.getFieldValue('hourPerDay');
-            let totalGoTime = timePerDay.reduce((acc,cur) => acc + cur.totalH, 0);
-            form.setFieldValue('totalHour',totalGoTime);
-        }else form.resetFields(['totalHour']);
-    };
+    // const handleChangeTimePerDay = (value) => {
+    //     if(value > 0){
+    //         let timePerDay = form.getFieldValue('hourPerDay');
+    //         let totalGoTime = timePerDay.reduce((acc,cur) => acc + cur.totalH, 0);
+    //         form.setFieldValue('totalHour',totalGoTime);
+    //     }else form.resetFields(['totalHour']);
+    // };
 
     return(
         <div>
