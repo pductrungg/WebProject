@@ -189,6 +189,13 @@ export const calcLeaveHours = (start, end) => {
   return leaveHours;
 };
 
+export const calMeetHours = (start, end) => {
+  //let leaveHours;
+  let leaveTime = Number((end.diff(start, 'minute') / 60).toFixed(1));
+
+  return leaveTime;
+}
+
 export const checkWeekend = (date) => {
   let checkWeekend = date.day(); // 0-Sunday   6-Saturday
   return checkWeekend === 0 || checkWeekend === 6;
