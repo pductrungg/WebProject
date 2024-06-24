@@ -2,7 +2,7 @@ import {useState, useCallback} from 'react';
 import {Form, Input, Modal, DatePicker, Select, InputNumber, Col, Row} from 'antd';
 import dayjs from 'dayjs';
 import {LEAVE_TIME_OPTIONS, LEAVE_TIME_HOUR, GET_DAY_FUNC_TYPE, WORKING_TIME} from '../../constant';
-import {getDayToCalcTime, calcLeaveHours, checkWeekend, getDataFromToken} from '../../utils/helpers';
+import {getDayToCalcTime, calcLeaveHours, checkWeekend, getDataFromToken,calMeetHours} from '../../utils/helpers';
 import { iteratee } from 'lodash';
 import { current } from '@reduxjs/toolkit';
 
@@ -61,7 +61,7 @@ const CF = ({
         let toDateString = getDayToCalcTime(GET_DAY_FUNC_TYPE.TO_JSON, end);
 
         if(fromDatetoString === toDateString){
-            totalHours = calcLeaveHours(start, end);
+            totalHours = calMeetHours(start, end);
             timePerDay.push({
                 leaveDate: dayjs(start)
                 .set('h', WORKING_TIME.NEW_DAY[0])
@@ -80,7 +80,7 @@ const CF = ({
                 }
 
                 if(i === 1){
-                    let leaveTime = calcLeaveHours(
+                    let leaveTime = calMeetHours(
                         day_cal,
                         getDayToCalcTime(GET_DAY_FUNC_TYPE.END_DAY,day_cal)
                     );
@@ -93,7 +93,7 @@ const CF = ({
                         totalH: leaveTime,
                     });
                 } else {
-                    let leaveTime = calcLeaveHours(
+                    let leaveTime = calMeetHours(
                         getDayToCalcTime(GET_DAY_FUNC_TYPE.START_DAY, day_cal),
                         getDayToCalcTime(GET_DAY_FUNC_TYPE.END_DAY, day_cal)
                     );
@@ -112,7 +112,7 @@ const CF = ({
 
             if(fromDatetoString === toDateString){
                 if(!checkWeekend(day_cal)){
-                    let leaveTime = calcLeaveHours(
+                    let leaveTime = calMeetHours(
                         getDayToCalcTime(GET_DAY_FUNC_TYPE.START_DAY, day_cal),
                         end
                     );
@@ -396,7 +396,7 @@ const CF = ({
                         <Input placeholder="Nội dung trao đổi với khách hàng" type="textarea"></Input>
                     </Form.Item>
                     
-                    <Form.Item
+                    {/* <Form.Item
                         name="goTime"
                         label="Thời gian gặp khách hàng"
                         rules={[
@@ -421,12 +421,15 @@ const CF = ({
                                 );
                             })}
                         </Select>
-                    </Form.Item>
+                    </Form.Item> */}
 
-                {leaveTime === LEAVE_TIME_HOUR.A_DAY &&(
-                    <Form.Item
+                {/* {leaveTime === LEAVE_TIME_HOUR.A_DAY &&(
+                )} */}
+        {/* //////////// */}
+
+                    {/* <Form.Item
                         name="NgayGapKhachHang"
-                        label="Ngày gặp khách hàng"
+                        label="Ngày gặp khách hàngggggggg"
                         rules={[
                             {
                                 type: 'object',
@@ -446,17 +449,16 @@ const CF = ({
                     >
                         <DatePicker
                             onChange={handleDayOff}
-                            placeholder="Chọn ngày gặp khách hàng"
+                            placeholder="Chọn ngày gặp khách hànggggg"
                             format="DD-MM-YYYY"
                             style={{
                                 width: '100%',
                             }}
                         />
-                    </Form.Item>
-                )}
-
+                    </Form.Item> */}
+            {/* /////////////////// */}
                     <Form.Item
-                        hidden={isHiddenField}
+                        // hidden={isHiddenField}
                         name="goFrom"
                         label="Bắt đầu gặp khách hàng từ ngày"
                         rules={[
@@ -477,20 +479,21 @@ const CF = ({
                         style={{marginBottom: '16px'}}   
                     >
                         <DatePicker
-                            placeholder="Chọn ngày gặp khách hàng"
-                            showTime={{defaultValue: dayjs('00:00:00','HH:mm:ss')}}
+                            placeholder="Chọn thời gian bắt đầu"
+                            showTime={{defaultValue: dayjs('08:00', 'HH:mm')}}
+                            // showTime
                             format="DD-MM-YYYY HH:mm"
                             style={{
                                 width:'100%',
                             }}
-                            disabledTime={
-                                !isOpenLeaveHourField
-                                ? () => ({
-                                    disabledHours: () => numRange(0, 23),
-                                    disabledMinutes: () => numRange(0, 59),
-                                  })
-                                : null
-                            }
+                            // disabledTime={
+                            //     !isOpenLeaveHourField
+                            //     ? () => ({
+                            //         disabledHours: () => numRange(0, 23),
+                            //         disabledMinutes: () => numRange(0, 59),
+                            //       })
+                            //     : null
+                            // }
                             onChange={ChangeTime}
                             minuteStep={5}
                             popupClassName="CFDatePick"
@@ -498,7 +501,7 @@ const CF = ({
                     </Form.Item>
 
                     <Form.Item
-                        hidden={isHiddenField}
+                        // hidden={isHiddenField}
                         name="dayBack"
                         label="Kết thúc"
                         rules={[
@@ -523,37 +526,96 @@ const CF = ({
                         style={{marginBottom: '16px'}}
                     >
                         <DatePicker
-                            placeholder="Chọn ngày kết thúc"
-                            showTime={{defaultValue: dayjs('00:00:00','HH:mm:ss')}}
+                            placeholder="Chọn thời gian kết thúc"
+                            showTime={{defaultValue: null}}
                             format="DD-MM-YYYY HH:mm"
                             style={{
                                 width:'100%',
                             }}
+                            // disabledDate={(current) => {
+                            //     return(
+                            //         current &&
+                            //         form.getFieldValue('goFrom') &&
+                            //         current > form.getFieldValue('goFrom')
+                            //     );
+                            // }}
+                            ///////////////////////////////////////////////////////
+                            // disabledTime={
+                            //     !isOpenLeaveHourField
+                            //     ? () => ({
+                            //         disabledHours: () => numRange(0, 23),
+                            //         disabledMinutes: () => numRange(0, 59),
+                            //         })
+                            //     : null
+                            // }
+                            ////////////////////////////////////////////////////////
+                            // disabled={!isOpenLeaveHourField}
+                            ///////////////////////////////////////////////////////
                             disabledDate={(current) => {
-                                return(
-                                    current &&
-                                    form.getFieldValue('goFrom') &&
-                                    current < form.getFieldValue('goFrom')
-                                );
+                            const goFromDate = form.getFieldValue('goFrom');
+                            return (
+                                current &&
+                                goFromDate &&
+                                !current.isSame(goFromDate, 'day') // Only allow the same day
+                            );
                             }}
-                            disabledTime={
-                                !isOpenLeaveHourField
-                                ? () => ({
-                                    disabledHours: () => numRange(0, 23),
-                                    disabledMinutes: () => numRange(0, 59),
-                                    })
-                                : null
-                            }
-                            disabled={!isOpenLeaveHourField}
+                            // disabledTime={(current) => {
+                            //     const goFromDate = form.getFieldValue('goFrom');
+                            //     if (!isOpenLeaveHourField || !goFromDate || !current) return {};
+                            //     const goFromHour = goFromDate.hour();
+                            //     const goFromMinute = goFromDate.minute();
+                            //     return {
+                            //       disabledHours: () => numRange(0, goFromHour),
+                            //       disabledMinutes: (selectedHour) => selectedHour === goFromHour ? numRange(0, goFromMinute) : [],
+                            //     };
+                            //   }}
                             onChange={ChangeTime}
                             minuteStep={5}
                             popupClassName="CFDatePick"
                         />
                     </Form.Item>
+                    
+                    
+
+                    {/* <Form.Item
+                        //hidden={isHiddenField}
+                        name="KetThuc"
+                        label="Chọn ngày kết thúc"
+                        rules={[
+                            {type: 'object', required: true, message: 'Vui lòng chọn thời gian kết thúc'},
+                            ({getFieldValue}) => ({
+                              validator(_, value) {
+                                if (!value || getFieldValue('goFrom') < value) {
+                                  return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('Thời gian kết thúc phải lớn hơn bắt đầu'));
+                              },
+                            }),
+                            () => ({
+                              validator(_, value) {
+                                if (!value || !checkWeekend(value)) {
+                                  return Promise.resolve();
+                                }
+                                return Promise.reject(new Error('Ngày đang chọn là cuối tuần!'));
+                              },
+                            }),
+                          ]}
+                          style={{marginBottom: '16px'}}
+                    >
+                        <DatePicker
+                            placeholder="Kết thúc thời gian gặp khách hàng"
+                            showTime={{defaultValue: dayjs('00:00','HH:mm')}}
+                            format="DD-MM-YYYY HH:mm"
+                            onChange={ChangeTime}
+                            minuteStep={5}
+                            popupClassName="CFDatePick"
+                            disabled={!isOpenLeaveHourField}
+                        />
+                    </Form.Item> */}
 
                     <Form.Item
                         name="totalHour"
-                        label="Thời gian gặp khách hàng"
+                        label="Số giờ gặp khách hàng"
                         rules={[
                             {
                                 required: true,
