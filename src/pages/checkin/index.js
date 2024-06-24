@@ -131,6 +131,8 @@ const CheckIn = () => {
   const [statusCurrentLQ, setStatusCurrentLQ] = useState(null);
   const [isOpenConfirmLQModal, setIsOpenConfirmLQModal] = useState(false);
 
+  const [openCF, setCfOpen] = useState(false);
+
   const resetStateAfterCloseModal = useCallback(() => {
     setIsOpenConfirmLQModal(false);
     setCurrentLQ(null);
@@ -980,7 +982,7 @@ const CheckIn = () => {
                 </div>
                 {/* -----START LEAVE REQUEST FORM----- */}
                 
-                <div>
+                <div style={{display: 'flex', gap: '10px'}}>
                   <Button
                     className="bg-primary-pink"
                     type="primary"
@@ -1001,15 +1003,11 @@ const CheckIn = () => {
                       userInfo={userInfo}
                     />
                   </div>
-                </div>
-                {/* -----END LEAVE REQUEST FORM----- */}
-                
-                <div> 
                     <Button
                       className='bg-primary' 
                       type="primary"
                        onClick={() => {
-                        setOpen(true);
+                        setCfOpen(true);
                        }}
                     >
                       Đăng kí gặp khách hàng
@@ -1017,15 +1015,20 @@ const CheckIn = () => {
 
                     <div>
                        <CF
-                        openForm={open}
+                        openForm={openCF}
                         CreateForm={handleSubmitForm}
-                        CancelForm={handleCancelForm}
+                        // CancelForm={handleCancelForm}
+                        CancelForm={() => setCfOpen(false)}
                         confirmForm={submitFormLoading}
                         maskClosable={false}
                         depOption={departmentOptions}
                         userInfo={userInfo}
                       />
                     </div>
+                </div>
+                {/* -----END LEAVE REQUEST FORM----- */}
+                
+                <div> 
                 </div>
 
 
