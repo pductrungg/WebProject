@@ -18,6 +18,7 @@ import {
   getDataFromToken,
   getStatusLeaveRequestText,
   openAmisLeaveOfAbsence,
+  openAimMeeting,
 } from '../../utils/helpers';
 import {SimpleCardItem} from '../../components/checkin/card';
 import {controlLoading} from '../../redux/slices/appSlice';
@@ -31,6 +32,7 @@ import {
   postLeaveOfAbsenceRequestApi,
   getUserLeaveOfAbsenceApi,
   updateStatusLeaveOfAbsenceApi,
+  outOfficeApi,
 } from '../../apis';
 import debounce from 'lodash/debounce';
 import {handleErrorResponse} from '../../utils/handleError';
@@ -132,6 +134,7 @@ const CheckIn = () => {
   const [isOpenConfirmLQModal, setIsOpenConfirmLQModal] = useState(false);
 
   const [openCF, setCfOpen] = useState(false);
+  const [submitCF, setSubmitCF] = useState(false);
 
   const resetStateAfterCloseModal = useCallback(() => {
     setIsOpenConfirmLQModal(false);
@@ -848,6 +851,81 @@ const CheckIn = () => {
     setOpen(false);
   };
 
+  //Customer meet form
+  const handleSubmitCF = async (values) => {
+    setSubmitCF(true);
+
+    let params = {
+      deptId: values?.deptId,
+      userId: values?.userId,
+      email: userInfo?.email,
+      // date: values?.goFrom?.utc(true)?.format('YYYY-MM-DD HH:mm:ss'),
+      date: dayjs(values?.dates)?.utc(true)?.format('YYYY-MM-DD HH:mm:ss'),
+      from: values?.goFrom?.utc(true)?.format('YYYY-MM-DD HH:mm:ss'),
+      to: values?.dayBack?.utc(true)?.format('YYYY-MM-DD HH:mm:ss'),
+      totalHour: values?.totalHour,
+      reason: values?.NoiDung,
+      note:values?.note,
+    };
+
+    // let CFDetail = values?.leaveHourPerDay.map((item) => {
+    //   return{
+    //     ...item,
+    //     goFrom: item?.goFrom?.utc(true)?.format('YYYY-MM-DD HH:mm:ss' ),
+    //     userId: userInfo?.userId,
+    //   };
+    // });
+    // params.CFDetail = CFDetail;
+
+    // if (values && values.leaveHourPerDay && Array.isArray(values.leaveHourPerDay)) {
+    //   let CFDetail = values.leaveHourPerDay.map((item) => ({
+    //     ...item,
+    //     goFrom: item?.goFrom?.utc(true)?.format('YYYY-MM-DD HH:mm:ss'),
+    //     userId: userInfo?.userId,
+    //   }));
+    //   params.CFDetail = CFDetail;
+    // } else {
+    //   params.CFDetail = [];
+    // }
+
+    dispatch(controlLoading(true));
+
+    try{
+      const result_CF = await outOfficeApi(params);
+
+      if(result_CF?.isSuccess && !!result_CF?.data){
+        setCfOpen(false);
+        dispatch(controlLoading(false));
+        setSubmitCF(false);
+        let processID = result_CF.data;
+        openAimMeeting(processID);
+      }else{
+        dispatch(controlLoading(false));
+        setSubmitCF(false);
+
+        toast.error(result_CF?.detail || 'Dang ki that bai',{
+          autoClose: 1500,
+          position: 'top-center',
+        });
+      }
+    }catch(err){
+      dispatch(controlLoading(false));
+      setSubmitCF(false);
+      if(err?.response){
+        handleErrorResponse(err.response);
+      }else{
+        toast.error(err?.message || 'Dang ki that bai',{
+          autoClose: 2000,
+          position: 'top-center',
+        });
+      }
+    }
+  };
+
+  const handleCancelCF = () => {
+    setCfOpen(false);
+  };
+
   // control update status leave of absence
   const handleUpdateStatusLeaveRequest = useCallback(
     async (data, status) => {
@@ -1016,10 +1094,10 @@ const CheckIn = () => {
                     <div>
                        <CF
                         openForm={openCF}
-                        CreateForm={handleSubmitForm}
-                        // CancelForm={handleCancelForm}
+                        CreateForm={handleSubmitCF}
+                        // CancelForm={handleCancelCF}
                         CancelForm={() => setCfOpen(false)}
-                        confirmForm={submitFormLoading}
+                        confirmForm={submitCF}
                         maskClosable={false}
                         depOption={departmentOptions}
                         userInfo={userInfo}

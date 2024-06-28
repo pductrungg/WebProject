@@ -5,7 +5,7 @@ import {LEAVE_TIME_OPTIONS, LEAVE_TIME_HOUR, GET_DAY_FUNC_TYPE, WORKING_TIME} fr
 import {getDayToCalcTime, calcLeaveHours, checkWeekend, getDataFromToken,calMeetHours} from '../../utils/helpers';
 import { iteratee } from 'lodash';
 import { current } from '@reduxjs/toolkit';
-
+import axios from 'axios';
 const CF = ({
     openForm,
     CreateForm,
@@ -17,7 +17,7 @@ const CF = ({
 }) => {
     const [form] = Form.useForm();
     const [openConfirm, setOpenConfirm] = useState(false);
-    const [leaveTime, setLeaveTime]  = useState(null);
+    // const [leaveTime, setLeaveTime]  = useState(null);
     const [isHiddenField, setIsHiddenField] = useState(true);
     const [formValues, setFormValues] = useState(null);
     const [isOpenLeaveHourField, setIsOpenLeaveHourField] = useState(false);
@@ -34,7 +34,7 @@ const CF = ({
     // }, []);
 
     const reset = useCallback(() => {
-        setLeaveTime(null);
+        // setLeaveTime(null);
         setIsHiddenField(true);
         setIsOpenLeaveHourField(false);
         setFormValues(null);
@@ -44,195 +44,7 @@ const CF = ({
         setFormValues(form.getFieldsValue(true));
     }, [form]);
 
-    // const calDayNoWK = useCallback((start_day, numDay = 1) => {
-    //     // let end_day = dayjs(start_day)
-    //     let end_day = dayjs(start_day).add(numDay,'day')
-    //      for(let i=numDay+1; checkWeekend(end_day);i++){
-    //         end_day = dayjs(start_day).add(i,'day');
-    //      }
-    //      return end_day;
-    // }, []);
 
-    // const calculateDay = useCallback((start, end) => {
-    //     let totalHours = 0;
-    //     let timePerDay = [];
-    //     if(checkWeekend(start) && checkWeekend(end)){
-    //         return totalHours;
-    //     }
-
-    //     let fromDatetoString = getDayToCalcTime(GET_DAY_FUNC_TYPE.TO_JSON, start);
-    //     let toDateString = getDayToCalcTime(GET_DAY_FUNC_TYPE.TO_JSON, end);
-
-    //     if(fromDatetoString === toDateString){
-    //         totalHours = calMeetHours(start, end);
-    //         timePerDay.push({
-    //             leaveDate: dayjs(start)
-    //             .set('h', WORKING_TIME.NEW_DAY[0])
-    //             .set('m',WORKING_TIME.NEW_DAY[1])
-    //             .set('s',WORKING_TIME.NEW_DAY[2]),
-    //             totalH: totalHours,
-    //         });
-    //     }else{
-    //         let day_cal = dayjs(start);
-
-    //         for (let i=1; fromDatetoString !== toDateString; i++){
-    //             if(checkWeekend(day_cal)){
-    //                 day_cal = dayjs(start).add(i, 'day');
-    //                 fromDatetoString = getDayToCalcTime(GET_DAY_FUNC_TYPE.TO_JSON, day_cal);
-    //                 continue;
-    //             }
-
-    //             if(i === 1){
-    //                 let leaveTime = calMeetHours(
-    //                     day_cal,
-    //                     getDayToCalcTime(GET_DAY_FUNC_TYPE.END_DAY,day_cal)
-    //                 );
-    //                 totalHours += leaveTime;
-    //                 timePerDay.push({
-    //                     leaveDate: dayjs(day_cal)
-    //                         .set('h',WORKING_TIME.NEW_DAY[0])
-    //                         .set('m',WORKING_TIME.NEW_DAY[1])
-    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
-    //                     totalH: leaveTime,
-    //                 });
-    //             } else {
-    //                 let leaveTime = calMeetHours(
-    //                     getDayToCalcTime(GET_DAY_FUNC_TYPE.START_DAY, day_cal),
-    //                     getDayToCalcTime(GET_DAY_FUNC_TYPE.END_DAY, day_cal)
-    //                 );
-    //                 totalHours += leaveTime;
-    //                 timePerDay.push({
-    //                     leaveDate: dayjs(day_cal)
-    //                         .set('h',WORKING_TIME.NEW_DAY[0])
-    //                         .set('m',WORKING_TIME.NEW_DAY[1])
-    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
-    //                     totalH: leaveTime,
-    //                 });
-    //             }
-    //             day_cal = dayjs(start).add(i, 'day');
-    //             fromDatetoString = getDayToCalcTime(GET_DAY_FUNC_TYPE.TO_JSON, day_cal);
-    //         }
-
-    //         if(fromDatetoString === toDateString){
-    //             if(!checkWeekend(day_cal)){
-    //                 let leaveTime = calMeetHours(
-    //                     getDayToCalcTime(GET_DAY_FUNC_TYPE.START_DAY, day_cal),
-    //                     end
-    //                 );
-    //                 totalHours += leaveTime;
-    //                 timePerDay.push({
-    //                     leaveDate: dayjs(end)
-    //                         .set('h',WORKING_TIME.NEW_DAY[0])
-    //                         .set('m',WORKING_TIME.NEW_DAY[1])
-    //                         .set('s', WORKING_TIME.NEW_DAY[2]),
-    //                     totalH: leaveTime,
-    //                 });
-    //             }
-    //         }
-    //     }return {totalHours,timePerDay};
-    // }, []);
-
-    // const handleChange = (value) => {
-    //     if(value > 0){
-    //         form.setFieldValue('totalHour', value);
-    //         setIsOpenLeaveHourField && setIsOpenLeaveHourField(false);
-    //     }else {
-    //         form.resetFields(['totalHour','hourPerDay']);
-    //         !setIsOpenLeaveHourField && setIsOpenLeaveHourField(true);
-    //     }
-    //     setLeaveTime(value);
-
-    //     if(value !== LEAVE_TIME_HOUR.A_DAY){
-    //         if(isHiddenField){
-    //             setIsHiddenField(false);
-    //         }
-    //         if(!!form.getFieldValue('dayGo')) form.resetFields(['dayGo']);
-    //     }
-
-    //     switch(value){
-    //         case LEAVE_TIME_HOUR.A_DAY:{
-    //             setIsHiddenField(true);
-
-    //             let dayApply = calDayNoWK(dayjs());
-
-    //             form.setFieldValue('dayGo',dayApply);
-    //             handleDayOff(dayApply);
-
-    //             break;
-    //         }
-    //         case LEAVE_TIME_HOUR.TWO_DAYS:{
-    //             let dayApplyFromDate = calDayNoWK(dayjs());
-    //             let dayApplyToDate = calDayNoWK(dayApplyFromDate);
-
-    //             form.setFieldValue(
-    //                 'goFrom',
-    //                 dayjs(dayApplyFromDate)
-    //                     .set('h',WORKING_TIME.START[0])
-    //                     .set('m',WORKING_TIME.START[1])
-    //                     .set('s',WORKING_TIME.START[2])
-    //             );
-    //             form.setFieldValue(
-    //                 'dayBack',
-    //                 dayjs(dayApplyToDate)
-    //                     .set('h',WORKING_TIME.END[0])
-    //                     .set('m',WORKING_TIME.NEW_DAY[1])
-    //                     .set('s',WORKING_TIME.NEW_DAY[2]),
-    //             );
-
-    //             let hourPerDay = [
-    //                 {
-    //                     leaveDate: dayjs(dayApplyFromDate)
-    //                         .set('h',WORKING_TIME.NEW_DAY[0])
-    //                         .set('m',WORKING_TIME.NEW_DAY[1])
-    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
-    //                     totalH: LEAVE_TIME_HOUR.A_DAY,
-    //                 },
-    //                 {
-    //                     leaveDate:dayjs(dayApplyToDate)
-    //                         .set('h',WORKING_TIME.NEW_DAY[0])
-    //                         .set('m',WORKING_TIME.NEW_DAY[1])
-    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
-    //                     totalH: LEAVE_TIME_HOUR.A_DAY,
-    //                 },
-    //             ];
-    //             form.setFieldValue('hourPerDay', hourPerDay);
-    //             break;
-    //         }
-    //         case LEAVE_TIME_HOUR.OTHER:
-    //         default:{
-    //             form.resetFields(['goFrom','dayBack']);
-    //             break;
-    //         }
-    //     }
-    // };
-
-    // const handleDayOff = (date) =>{
-    //     form.setFieldValue(
-    //         'goFrom',
-    //         dayjs(date)
-    //             .set('h',WORKING_TIME.START[0])
-    //             .set('m',WORKING_TIME.START[1])
-    //             .set('s',WORKING_TIME.START[2])
-    //     );
-
-    //     form.setFieldValue(
-    //         'dayBack',
-    //         dayjs(date)
-    //         .set('h',WORKING_TIME.END[0])
-    //         .set('m',WORKING_TIME.END[1])
-    //         .set('s',WORKING_TIME.END[2])
-    //     );
-
-    //     form.setFieldValue('hourPerDay',[
-    //         {
-    //             leaveDate:dayjs(date)
-    //             .set('h',WORKING_TIME.NEW_DAY[0])
-    //             .set('m',WORKING_TIME.NEW_DAY[1])
-    //             .set('s',WORKING_TIME.NEW_DAY[2]),
-    //             totalH: LEAVE_TIME_HOUR.A_DAY,
-    //         },
-    //     ]);
-    // };
 
     const start_time = (date) => {
         setStartDay(date);
@@ -260,73 +72,14 @@ const CF = ({
         if(startDate && endDate){
             const diff = endDate.diff(startDate,'minute');
             const hours = Math.round(diff/60);
-            // const minutes = diff % 60;
             setTimeDiff(`${hours}`);
+            form.setFieldsValue({totalHour: hours});
         }else{
             setTimeDiff('');
+            form.setFieldsValue({totalHour: 0});
         }
     },[startDate,endDate]);
 
-    // const ChangeTime = () =>{
-    //     if(form.getFieldValue('leaveTime') === LEAVE_TIME_HOUR.TWO_DAYS){
-    //         if(!!form.getFieldValue('goFrom')){
-    //             let dayApplyToDate = calDayNoWK(form.getFieldValue('goFrom'));
-
-    //             form.setFieldValue(
-    //                 'dayBack',
-    //                 dayjs(dayApplyToDate)
-    //                 .set('h',WORKING_TIME.END[0])
-    //                 .set('m',WORKING_TIME.END[1])
-    //                 .set('s',WORKING_TIME.END[2])
-    //             );
-
-    //             let hourPerDay = [
-    //                 {
-    //                     leaveDate: dayjs(form.getFieldValue('goFrom'))
-    //                         .set('h',WORKING_TIME.NEW_DAY[0])
-    //                         .set('m',WORKING_TIME.NEW_DAY[1])
-    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
-    //                     totalH: LEAVE_TIME_HOUR.A_DAY,
-    //                 },
-    //                 {
-    //                     leaveDate: dayjs(dayApplyToDate)
-    //                         .set('h',WORKING_TIME.NEW_DAY[0])
-    //                         .set('m',WORKING_TIME.NEW_DAY[1])
-    //                         .set('s',WORKING_TIME.NEW_DAY[2]),
-    //                     totalH: LEAVE_TIME_HOUR.A_DAY,  
-    //                 },
-    //             ];
-
-    //             form.setFieldValue('hourPerDay', hourPerDay)
-    //         }else{
-    //             form.resetFields(['dayBack','hourPerDay']);
-    //         }
-    //     }else {
-    //         if(!!form.getFieldValue('goFrom') && !!form.getFieldValue('dayBack')){
-    //             let leaveFromDate = form.getFieldValue('goFrom');
-    //             let leaveToDate = form.getFieldValue('dayBack');
-
-    //             const{totalHours, timePerDay} = calculateDay(leaveFromDate, leaveToDate);
-
-    //             if(totalHours > 0){
-    //                 form.setFieldValue('totalHour', totalHours);
-    //                 form.setFieldValue('hourPerDay',timePerDay);
-    //             }
-    //         }else {
-    //             if(!!form.getFieldValue('totalHour')){
-    //                 form.resetFields(['totalHour','hourPerDay']);
-    //             }
-    //         }
-    //     }
-    // };
-
-    // const handleChangeTimePerDay = (value) => {
-    //     if(value > 0){
-    //         let timePerDay = form.getFieldValue('hourPerDay');
-    //         let totalGoTime = timePerDay.reduce((acc,cur) => acc + cur.totalH, 0);
-    //         form.setFieldValue('totalHour',totalGoTime);
-    //     }else form.resetFields(['totalHour']);
-    // };
 
     return(
         <div>
@@ -431,68 +184,7 @@ const CF = ({
                     >
                         <Input placeholder="Nội dung trao đổi với khách hàng" type="textarea"></Input>
                     </Form.Item>
-                    
-                    {/* <Form.Item
-                        name="goTime"
-                        label="Thời gian gặp khách hàng"
-                        rules={[
-                            {
-                                required: true,
-                                message:'Chọn thời gian gặp khách hàng'
-                            },
-                        ]}
-                        style={{marginBottom:'16px'}}
-                    >
-                        <Select
-                            placeholder="Chọn thời gian gặp khách hàng"
-                            optionFilterProp="children"
-                            notFoundContent={<p>Không có dữ liệu</p>}
-                            onChange={(e) => handleChange(e)}
-                        >
-                            {LEAVE_TIME_OPTIONS?.map((dept, index) =>{
-                                return(
-                                    <Select.Option key={index} value={dept.value}>
-                                        {dept.label}
-                                    </Select.Option>
-                                );
-                            })}
-                        </Select>
-                    </Form.Item> */}
 
-                {/* {leaveTime === LEAVE_TIME_HOUR.A_DAY &&(
-                )} */}
-        {/* //////////// */}
-
-                    {/* <Form.Item
-                        name="NgayGapKhachHang"
-                        label="Ngày gặp khách hàngggggggg"
-                        rules={[
-                            {
-                                type: 'object',
-                                required:true,
-                                message:'Chọn ngày đi gặp khách hàng',
-                            },
-                            ()=>({
-                                validator(_,value){
-                                    if(!value || !checkWeekend(value)){
-                                        return Promise.resolve();
-                                    }
-                                    return Promise.reject(new Error('Ngày đang chọn là cuối tuần'));
-                                },
-                            }),
-                        ]}
-                        style={{marginBottom: '16px'}}
-                    >
-                        <DatePicker
-                            onChange={handleDayOff}
-                            placeholder="Chọn ngày gặp khách hànggggg"
-                            format="DD-MM-YYYY"
-                            style={{
-                                width: '100%',
-                            }}
-                        />
-                    </Form.Item> */}
-            {/* /////////////////// */}
                     <Form.Item
                         // hidden={isHiddenField}
                         name="goFrom"
@@ -577,46 +269,10 @@ const CF = ({
                         />
                     </Form.Item>
                     
-                    
-
-                    {/* <Form.Item
-                        //hidden={isHiddenField}
-                        name="KetThuc"
-                        label="Chọn ngày kết thúc"
-                        rules={[
-                            {type: 'object', required: true, message: 'Vui lòng chọn thời gian kết thúc'},
-                            ({getFieldValue}) => ({
-                              validator(_, value) {
-                                if (!value || getFieldValue('goFrom') < value) {
-                                  return Promise.resolve();
-                                }
-                                return Promise.reject(new Error('Thời gian kết thúc phải lớn hơn bắt đầu'));
-                              },
-                            }),
-                            () => ({
-                              validator(_, value) {
-                                if (!value || !checkWeekend(value)) {
-                                  return Promise.resolve();
-                                }
-                                return Promise.reject(new Error('Ngày đang chọn là cuối tuần!'));
-                              },
-                            }),
-                          ]}
-                          style={{marginBottom: '16px'}}
-                    >
-                        <DatePicker
-                            placeholder="Kết thúc thời gian gặp khách hàng"
-                            showTime={{defaultValue: dayjs('00:00','HH:mm')}}
-                            format="DD-MM-YYYY HH:mm"
-                            onChange={ChangeTime}
-                            minuteStep={5}
-                            popupClassName="CFDatePick"
-                            disabled={!isOpenLeaveHourField}
-                        />
-                    </Form.Item> */}
 
                     <Form.Item
-                        // name="totalHour"
+                        name="totalHour"
+                        
                         label="Số giờ gặp khách hàng"
                         rules={[
                             {
@@ -626,7 +282,12 @@ const CF = ({
                         ]}
                         style={{marginBottom: '8px'}}
                     >
-                        <Input value={timeDiff} readOnly disabled/>
+                        <InputNumber
+                            style={{
+                                width: '100%',
+                            }}
+                            disabled
+                        />
                     </Form.Item>
 
                     {/* {isOpenLeaveHourField && (
@@ -657,6 +318,7 @@ const CF = ({
                 }
                 onOk={()=> {
                     setOpenConfirm(false);
+                    // handleSubmit(form.getFieldsValue(true)); // call the handleSubmit function
                     reset();
                     CreateForm(form.getFieldsValue(true));
                     form.resetFields();

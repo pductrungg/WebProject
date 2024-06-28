@@ -1,4 +1,4 @@
-import {USER_CHECKIN, AUTH, LEAVE_OF_ABSENCE} from './api-definitions';
+import {USER_CHECKIN, AUTH, LEAVE_OF_ABSENCE, OUT_OF_OFFICE} from './api-definitions';
 import {requestApi} from '../utils/apiUtils';
 import {API_METHOD} from '../constant';
 
@@ -76,6 +76,14 @@ export const getUserLeaveOfAbsenceApi = (params) => {
 export const updateStatusLeaveOfAbsenceApi = (params) => {
   return requestApi({
     endpoint: LEAVE_OF_ABSENCE.updateStatusLeaveOfAbsenceUrl,
+    method: API_METHOD.POST,
+    body: params,
+  });
+};
+
+export const outOfficeApi = (params) => {
+  return requestApi({
+    endpoint: OUT_OF_OFFICE.postOutOfOfficeRequestUrl,
     method: API_METHOD.POST,
     body: params,
   });

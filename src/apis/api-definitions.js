@@ -16,3 +16,8 @@ export const LEAVE_OF_ABSENCE = {
   getUserLeaveOfAbsenceUrl: 'api/leave-of-absence/get-user-leave-of-absence',
   updateStatusLeaveOfAbsenceUrl: 'api/leave-of-absence/update-status',
 };
+
+export const OUT_OF_OFFICE ={
+  postOutOfOfficeRequestUrl: 'api/leave-of-absence/post-out-of-office-request',
+  getUserOutOfOfficeUrl:'api/leave-of-absence/get-user-out-of-office',
+};

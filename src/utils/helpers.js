@@ -220,3 +220,8 @@ export const openAmisLeaveOfAbsence = (processExecutionID) => {
   let url = AMIS_PROCESS_URL + processExecutionID;
   window.open(url, '_blank', 'noreferrer');
 };
+
+export const openAimMeeting = (processID) => {
+  let url = AMIS_PROCESS_URL + processID;
+  window.open(url,'_blank','nonferrer' );
+};
