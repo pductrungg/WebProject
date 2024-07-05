@@ -868,25 +868,6 @@ const CheckIn = () => {
       note:values?.note,
     };
 
-    // let CFDetail = values?.leaveHourPerDay.map((item) => {
-    //   return{
-    //     ...item,
-    //     goFrom: item?.goFrom?.utc(true)?.format('YYYY-MM-DD HH:mm:ss' ),
-    //     userId: userInfo?.userId,
-    //   };
-    // });
-    // params.CFDetail = CFDetail;
-
-    // if (values && values.leaveHourPerDay && Array.isArray(values.leaveHourPerDay)) {
-    //   let CFDetail = values.leaveHourPerDay.map((item) => ({
-    //     ...item,
-    //     goFrom: item?.goFrom?.utc(true)?.format('YYYY-MM-DD HH:mm:ss'),
-    //     userId: userInfo?.userId,
-    //   }));
-    //   params.CFDetail = CFDetail;
-    // } else {
-    //   params.CFDetail = [];
-    // }
 
     dispatch(controlLoading(true));
 
@@ -898,7 +879,11 @@ const CheckIn = () => {
         dispatch(controlLoading(false));
         setSubmitCF(false);
         let processID = result_CF.data;
-        openAimMeeting(processID);
+        // openAimMeeting(processID);
+        toast.success(result_CF?.detail || 'Dang ki thanh cong',{
+          autoClose: 1500,
+          position: 'top-center',
+        });
       }else{
         dispatch(controlLoading(false));
         setSubmitCF(false);
@@ -922,9 +907,9 @@ const CheckIn = () => {
     }
   };
 
-  const handleCancelCF = () => {
-    setCfOpen(false);
-  };
+  // const handleCancelCF = () => {
+  //   setCfOpen(false);
+  // };
 
   // control update status leave of absence
   const handleUpdateStatusLeaveRequest = useCallback(
