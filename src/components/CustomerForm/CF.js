@@ -17,7 +17,6 @@ const CF = ({
 }) => {
     const [form] = Form.useForm();
     const [openConfirm, setOpenConfirm] = useState(false);
-    // const [leaveTime, setLeaveTime]  = useState(null);
     const [isHiddenField, setIsHiddenField] = useState(true);
     const [formValues, setFormValues] = useState(null);
     const [isOpenLeaveHourField, setIsOpenLeaveHourField] = useState(false);
@@ -25,16 +24,8 @@ const CF = ({
     const [startDate,setStartDay]=useState(null);
     const [timeDiff,setTimeDiff]=useState('');
     
-    // const numRange = useCallback((start, end) => {
-    //     const res = [];
-    //     for(let i=start; i<=end; i++){
-    //         res.push(i);
-    //     }
-    //     return res;
-    // }, []);
 
     const reset = useCallback(() => {
-        // setLeaveTime(null);
         setIsHiddenField(true);
         setIsOpenLeaveHourField(false);
         setFormValues(null);
@@ -49,7 +40,6 @@ const CF = ({
     const start_time = (date) => {
         setStartDay(date);
         if(date){
-            // setEndDay(endDate ? date.set('h',endDate.hour()).set('m',endDate.minute()):date);
             const EndSameDate = endDate ? date.set('h',endDate.hour()).set('m',endDate.minute()):date;
             setEndDay(EndSameDate);
             form.setFieldsValue({
@@ -186,7 +176,6 @@ const CF = ({
                     </Form.Item>
 
                     <Form.Item
-                        // hidden={isHiddenField}
                         name="goFrom"
                         label="Bắt đầu gặp khách hàng từ ngày"
                         rules={[
@@ -222,7 +211,6 @@ const CF = ({
                     </Form.Item>
 
                     <Form.Item
-                        // hidden={isHiddenField}
                         name="dayBack"
                         label="Kết thúc"
                         rules={[
@@ -290,10 +278,6 @@ const CF = ({
                         />
                     </Form.Item>
 
-                    {/* {isOpenLeaveHourField && (
-
-                    )} */}
-
                     <Form.Item
                         name="note"
                         label="Ghi chú"
@@ -318,7 +302,6 @@ const CF = ({
                 }
                 onOk={()=> {
                     setOpenConfirm(false);
-                    // handleSubmit(form.getFieldsValue(true)); // call the handleSubmit function
                     reset();
                     CreateForm(form.getFieldsValue(true));
                     form.resetFields();
