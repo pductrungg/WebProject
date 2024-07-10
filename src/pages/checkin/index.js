@@ -878,9 +878,8 @@ const CheckIn = () => {
         setCfOpen(false);
         dispatch(controlLoading(false));
         setSubmitCF(false);
-        let processID = result_CF.data;
-        // openAimMeeting(processID);
-        toast.success(result_CF?.detail || 'Dang ki thanh cong',{
+
+        toast.success("Đăng kí thành công",{
           autoClose: 1500,
           position: 'top-center',
         });
@@ -907,9 +906,7 @@ const CheckIn = () => {
     }
   };
 
-  // const handleCancelCF = () => {
-  //   setCfOpen(false);
-  // };
+
 
   // control update status leave of absence
   const handleUpdateStatusLeaveRequest = useCallback(
